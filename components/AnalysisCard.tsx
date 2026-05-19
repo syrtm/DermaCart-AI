@@ -9,6 +9,8 @@ export interface B2BAnalysis {
   crossSellRecommendation: string;
 }
 
+// ─── Risk Score Badge ─────────────────────────────────────────────────────────
+
 function RiskBadge({ score }: { score: number }) {
   const level =
     score <= 3
@@ -16,8 +18,6 @@ function RiskBadge({ score }: { score: number }) {
       : score <= 6
       ? { label: "Orta Risk", bg: "bg-amber-100", text: "text-amber-700", bar: "bg-amber-500" }
       : { label: "Yüksek Risk", bg: "bg-red-100", text: "text-red-700", bar: "bg-red-500" };
-
-  const pct = (score / 10) * 100;
 
   return (
     <div className="bg-white border border-gray-100 rounded-2xl p-4">
@@ -39,12 +39,35 @@ function RiskBadge({ score }: { score: number }) {
       <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-700 ${level.bar}`}
-          style={{ width: `${pct}%` }}
+          style={{ width: `${(score / 10) * 100}%` }}
         />
       </div>
     </div>
   );
 }
+
+// ─── Scientific Reference Footer ─────────────────────────────────────────────
+
+function ScientificReference() {
+  return (
+    <div className="flex items-start gap-3 bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3">
+      <div className="flex-shrink-0 w-7 h-7 bg-white border border-gray-200 rounded-lg flex items-center justify-center shadow-sm">
+        <span className="text-sm">🔬</span>
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-gray-700 mb-0.5">Bilimsel Referans</p>
+        <p className="text-xs text-gray-500 leading-relaxed">
+          Bu analiz, <span className="font-medium text-gray-700">Google Gemini 1.5 Flash</span> tarafından
+          dermatoloji literatürüne (JAAD, British Journal of Dermatology, AAD Guidelines) ve{" "}
+          <span className="font-medium text-gray-700">INCI bileşen veri tabanlarına</span> dayalı olarak
+          üretilmiştir. Klinik karar için dermatolog onayı önerilir.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function AnalysisCard({ data }: { data: B2BAnalysis }) {
   return (
@@ -84,6 +107,9 @@ export default function AnalysisCard({ data }: { data: B2BAnalysis }) {
         </div>
         <p className="text-sm text-sky-800 leading-relaxed">{data.crossSellRecommendation}</p>
       </div>
+
+      {/* Scientific Reference */}
+      <ScientificReference />
     </div>
   );
 }
